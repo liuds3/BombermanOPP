@@ -69,7 +69,7 @@
             this.lbTitle.Name = "lbTitle";
             this.lbTitle.Size = new System.Drawing.Size(265, 48);
             this.lbTitle.TabIndex = 2;
-            this.lbTitle.Text = "Chọn chế độ";
+            this.lbTitle.Text = "Select mode";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbTitle.Click += new System.EventHandler(this.lbTitle_Click);
             // 
@@ -80,7 +80,7 @@
             this.btn_exit.Name = "btn_exit";
             this.btn_exit.Size = new System.Drawing.Size(256, 48);
             this.btn_exit.TabIndex = 3;
-            this.btn_exit.Text = "Quay lại";
+            this.btn_exit.Text = "Exit";
             this.btn_exit.UseVisualStyleBackColor = true;
             this.btn_exit.Click += new System.EventHandler(this.button1_Click);
             // 
