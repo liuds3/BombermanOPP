@@ -1,4 +1,6 @@
-﻿using System;
+using BombermanMultiplayer.Objects.Facade;
+using BombermanMultiplayer.Objects.Prototype;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using IPrototype = BombermanMultiplayer.Objects.Prototype.IPrototype;
+using BombermanMultiplayer.Objects.Adapter;
 
 namespace BombermanMultiplayer
 {
@@ -22,8 +26,19 @@ namespace BombermanMultiplayer
         public World world;
         public Player player1, player2;
 
-        public List<Bomb> BombsOnTheMap;
+        public List<IBomb> BombsOnTheMap;
         public System.Timers.Timer LogicTimer;
+        private object originalBomb;
+        private List<NonExplosiveBomb> bombsOnTheMap = new List<NonExplosiveBomb>();
+
+        Bomb explosiveBomb = new Bomb(1, 1, 2, 5, 5, 0, 5, 5, 1);
+        NonExplosiveBomb nonExplosiveBomb = new NonExplosiveBomb(1, 1, 2, 5, 5, 0, 5, 5, 1);
+
+
+
+
+
+
 
         //ctor when picture box size is determined
         public Game(int hebergeurWidth, int hebergeurHeight)
@@ -33,7 +48,7 @@ namespace BombermanMultiplayer
             player1 = new Player(1, 2, 33, 33, 1, 1, 48, 48, 80, 1);
             player2 = new Player(1, 2, 33, 33, this.world.MapGrid.GetLength(0) - 2, this.world.MapGrid.GetLength(0) - 2, 48, 48, 80, 2);
 
-            this.BombsOnTheMap = new List<Bomb>();
+            this.BombsOnTheMap = new List<IBomb>();
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
         }
@@ -49,6 +64,7 @@ namespace BombermanMultiplayer
             this.BombsOnTheMap = save.bombsOnTheMap;
             this.LogicTimer = new System.Timers.Timer(40);
             this.LogicTimer.Elapsed += LogicTimer_Elapsed;
+
         }
         //default ctor
         public Game()
@@ -141,6 +157,9 @@ namespace BombermanMultiplayer
         //Manage key pushed for local game
         public void Game_KeyDown(Keys key)
         {
+            IBombAdapter explosiveBombAdapter = new BombAdapter(explosiveBomb);
+            IBombAdapter nonExplosiveBombAdapter = new NonExplosiveBombAdapter(nonExplosiveBomb);
+
             switch (key)
             {
                 case Keys.Z:
@@ -171,6 +190,7 @@ namespace BombermanMultiplayer
                     if (player1.Dead)
                         break;
                     player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2);
+                    ShowFacadeUsageExample();
                     break;
                 case Keys.A:
                     if (player1.Dead)
@@ -214,6 +234,20 @@ namespace BombermanMultiplayer
                 case Keys.Escape:
                     Pause();
                     break;
+                case Keys.Y:
+                    CreateDeepCopyOfBomb();
+                    break;
+                case Keys.U:
+                    CreateShallowCopyOfBomb();
+                    break;
+                case Keys.I:
+                    player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2);
+                    explosiveBombAdapter.Detonate();
+                    break;
+                case Keys.O:
+                    player2.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player1);
+                    nonExplosiveBombAdapter.Detonate();
+                    break;
             }
         }
 
@@ -256,7 +290,7 @@ namespace BombermanMultiplayer
                     sender.Orientation = Player.MovementDirection.RIGHT;
                     break;
                 case Keys.Space:
-                    sender.DropBomb(this.world.MapGrid, this.BombsOnTheMap, otherPlayer);
+                    sender.DropBomb(this.world.MapGrid, this.BombsOnTheMap, otherPlayer); //shallow copy
                     break;
                 case Keys.ControlKey:
                     sender.Deactivate(this.world.MapGrid, BombsOnTheMap, otherPlayer);
@@ -391,7 +425,7 @@ namespace BombermanMultiplayer
             {
                 BombsOnTheMap[i].UpdateFrame((int)LogicTimer.Interval);
                 BombsOnTheMap[i].TimingExplosion((int)LogicTimer.Interval);
-                if (BombsOnTheMap[i].Explosing == true)
+                if (BombsOnTheMap[i].GetExplosing())
                 {
                     BombsOnTheMap[i].Explosion(this.world.MapGrid, player1, player2);
                     ToRemove.Add(i);
@@ -420,7 +454,7 @@ namespace BombermanMultiplayer
                     {
                         if (player.BonusSlot[i] == Objects.BonusType.SpeedBoost)
                         {
-                            player.Vitesse /= 2;
+                            player.Speed /= 2;
                         }
 
                         player.BonusSlot[i] = Objects.BonusType.None;
@@ -453,7 +487,7 @@ namespace BombermanMultiplayer
                             break;
                         case Objects.BonusType.SpeedBoost:
                             player.BonusSlot[freeSlot] = Objects.BonusType.SpeedBoost;
-                            player.Vitesse *= 2;
+                            player.Speed *= 2;
                             player.BonusTimer[freeSlot] = 5000;
                             break;
                         case Objects.BonusType.Desamorce:
@@ -531,7 +565,7 @@ namespace BombermanMultiplayer
                     {
                         //UP
                         //Temporary version of player collision box with expected position after deplacement
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y - movingPlayer.Vitesse, movingPlayer.Source.Width, movingPlayer.Source.Height);
+                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y - movingPlayer.Speed, movingPlayer.Source.Width, movingPlayer.Source.Height);
 
                         if (!map[lig - 1, col - 1].Walkable || map[lig - 1, col - 1].Occupied)
                         {
@@ -555,7 +589,7 @@ namespace BombermanMultiplayer
                 case Player.MovementDirection.DOWN:
                     {
                         //DOWN
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y + movingPlayer.Vitesse, movingPlayer.Source.Width, movingPlayer.Source.Height);
+                        Rectangle rect = new Rectangle(movingPlayer.Source.X, movingPlayer.Source.Y + movingPlayer.Speed, movingPlayer.Source.Width, movingPlayer.Source.Height);
 
                         if (!map[lig + 1, col - 1].Walkable || map[lig + 1, col - 1].Occupied)
                         {
@@ -579,7 +613,7 @@ namespace BombermanMultiplayer
                 case Player.MovementDirection.LEFT:
                     {
                         //LEFT
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X - movingPlayer.Vitesse, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
+                        Rectangle rect = new Rectangle(movingPlayer.Source.X - movingPlayer.Speed, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
                         if (!map[lig - 1, col - 1].Walkable || map[lig - 1, col - 1].Occupied)
                         {
                             if (CheckCollisionRectangle(rect, map[lig - 1, col - 1].Source))
@@ -601,7 +635,7 @@ namespace BombermanMultiplayer
                     break;
                 case Player.MovementDirection.RIGHT:
                     {
-                        Rectangle rect = new Rectangle(movingPlayer.Source.X + movingPlayer.Vitesse, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
+                        Rectangle rect = new Rectangle(movingPlayer.Source.X + movingPlayer.Speed, movingPlayer.Source.Y, movingPlayer.Source.Width, movingPlayer.Source.Height);
                         //RIGHT
                         if (!map[lig - 1, col + 1].Walkable || map[lig - 1, col + 1].Occupied)
                         {
@@ -698,6 +732,46 @@ namespace BombermanMultiplayer
                     Paused = true;
                 }
             }
+        }
+
+
+        public void ShowFacadeUsageExample()
+        {
+            BombermanFacade bombermanFacade = new BombermanFacade();
+
+          
+            bombermanFacade.CreateNonExplosiveBomb(1, 2);
+
+            
+            bombermanFacade.MovePlayer(Player.MovementDirection.UP);
+        }
+
+        public void CreateShallowCopyOfBomb()
+        {
+            NonExplosiveBomb originalBomb = new NonExplosiveBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
+
+            IPrototype shallowCopy = originalBomb.ShallowCopy();
+
+            NonExplosiveBomb newBomb = (NonExplosiveBomb)shallowCopy;
+
+            newBomb.DetonationTime = 1000;
+
+            bombsOnTheMap.Add(newBomb);
+        }
+
+        public void CreateDeepCopyOfBomb()
+        {
+            NonExplosiveBomb originalBomb = new NonExplosiveBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
+
+            IPrototype deepCopy = originalBomb.DeepCopy();
+
+            NonExplosiveBomb newBomb = (NonExplosiveBomb)deepCopy;
+
+            newBomb.DetonationTime = 1000;
+
+
+            bombsOnTheMap.Add(newBomb);
+
         }
     }
 }

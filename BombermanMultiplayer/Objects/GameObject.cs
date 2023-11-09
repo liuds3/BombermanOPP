@@ -161,7 +161,7 @@ namespace BombermanMultiplayer
 
 
 
-        public void Bouger(int deplX, int deplY) // Ajoute juste le montant du déplacement à la postion de l'objet.
+        public void Move(int deplX, int deplY) // Ajoute juste le montant du déplacement à la postion de l'objet.
         {
             _Source.X += deplX;
             _Source.Y += deplY;

@@ -7,11 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
+using BombermanMultiplayer.Objects.Command;
+using ICommand = BombermanMultiplayer.Objects.Command.ICommand;
 
 namespace BombermanMultiplayer
 {
     public partial class MainMenu : Form
     {
+        private ICommand openModeCommand = new OpenModeCommand();
+        private ICommand exitCommand = new ExitCommand();
+        private ICommand openTutorialCommand = new OpenTutorialCommand();
+        private ICommand openHighScoreCommand = new OpenHighScoreCommand();
+        private ICommand openSettingCommand = new OpenSettingCommand();
+        private ICommand openAboutCommand = new OpenAboutCommand();
+
         public MainMenu()
         {
             InitializeComponent();
@@ -24,37 +34,32 @@ namespace BombermanMultiplayer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Mode mode = new Mode();
-            mode.Show();
+            openModeCommand.Execute();
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            this.Close();
+            exitCommand.Execute();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Tutorial tutorial = new Tutorial();
-            tutorial.Show();
+            openTutorialCommand.Execute();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            HighScore highScore = new HighScore();
-            highScore.Show();
+            openHighScoreCommand.Execute();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Setting setting = new Setting();
-            setting.Show();
+            openSettingCommand.Execute();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            About about = new About();
-            about.Show();
+            openAboutCommand.Execute();
         }
     }
 }

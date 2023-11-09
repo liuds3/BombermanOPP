@@ -17,8 +17,8 @@ namespace BombermanMultiplayer
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainMenu());
-            //Application.Run(new Lobby());
-            //Application.Run(new GameWindow());
+            Application.Run(new Lobby());
+            Application.Run(new GameWindow());
         }
     }
 }

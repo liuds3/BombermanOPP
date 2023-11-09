@@ -10,28 +10,28 @@ using System.Media;
 using System.Diagnostics;
 using System.Collections;
 using BombermanMultiplayer.Objects;
+using BombermanMultiplayer.Objects.Facade;
+using System.Data.Common;
+using BombermanMultiplayer.Objects.Prototype;
 
 namespace BombermanMultiplayer
 {
     [Serializable]
-    public class Player : GameObject
+    public class Player : GameObject, IPrototype
     {
-        byte PlayerNumero;
+        public byte PlayerNumero;
         public string Name = "Player";
-        private byte _Vitesse = 5;
+        private byte _Speed = 5;
         private bool _Dead = false;
         private byte _BombNumb = 2;
         private byte _Lifes = 1;
+
 
         //Player can have 2 bonus at the same time
         public BonusType[] BonusSlot = new BonusType[2];
         public short[] BonusTimer = new short[2];
 
         public MovementDirection Orientation  = MovementDirection.NONE;
-        
-
-        
-
 
         public int Wait = 500;
 
@@ -48,13 +48,10 @@ namespace BombermanMultiplayer
 
         #region Accessors
 
-
-
         public byte Lifes
         {
             get { return _Lifes; }
-            set { 
-                    _Lifes = value; }
+            set { _Lifes = value; }
         }
 
 
@@ -64,39 +61,29 @@ namespace BombermanMultiplayer
             set { _BombNumb = value; }
         }
 
-        public byte Vitesse
+        public byte Speed
         {
-            get { return _Vitesse; }
+            get { return _Speed; }
             set
             {
                 if (value > 0)
-                    _Vitesse = value;
-                else _Vitesse = 2;
+                    _Speed = value;
+                else _Speed = 2;
             }
 
         }
-
-        
-
-
-
 
         public bool Dead
         {
             get { return _Dead; }
             set
             {
-
                 _Dead = value;
-
             }
 
         }
 
         #endregion
-
-
-
 
         public Player(byte lifes, int totalFrames, int frameWidth, int frameHeight, int caseligne, int casecolonne, int TileWidth, int TileHeight, int frameTime, byte playerNumero)
             : base(casecolonne * TileWidth, caseligne * TileHeight, totalFrames, frameWidth, frameHeight, frameTime)
@@ -109,6 +96,15 @@ namespace BombermanMultiplayer
 
         }
 
+
+        //public void DropBomb(BombPrototype bombPrototype)
+        //{
+
+        //    Bomb newBomb = bombPrototype.CreateBomb();
+
+        //    BombsOnTheMap.Add(newBomb);
+
+        //}
         #region Deplacements
 
 
@@ -120,7 +116,11 @@ namespace BombermanMultiplayer
             this.CasePosition[0] = (this.Source.Y + this.Source.Height / 2) / tileHeight; //Ligne
             this.CasePosition[1] = (this.Source.X + this.Source.Width / 2) / tileWidth; //Colonne
 
+        }
 
+        public void update(string text)
+        {
+            Console.WriteLine(text);
         }
 
         public void Move()
@@ -143,52 +143,51 @@ namespace BombermanMultiplayer
                     this.frameindex = 0;
                     break;
             }
-
         }
 
 
         public void DeplHaut()
         {
-                base.Bouger(0, -Vitesse);
+            base.Move(0, -Speed);
         }
 
         public void DeplBas()
         {
-                base.Bouger(0, Vitesse);
+            base.Move(0, Speed);
         }
 
         public void DeplGauche()
         {
-                base.Bouger(-Vitesse, 0);
+            base.Move(-Speed, 0);
         }
 
         public void DeplDroite()
         {
-                base.Bouger(Vitesse, 0);
+            base.Move(Speed, 0);
         }
 
         public void NO()
         {
-            base.Bouger(-Vitesse / 2, 0);
-            base.Bouger(0, Vitesse / 2);
+            base.Move(-Speed / 2, 0);
+            base.Move(0, Speed / 2);
         }
         public void NE()
         {
             
-            base.Bouger(Vitesse / 2, 0);
-            base.Bouger(0, Vitesse / 2);
+            base.Move(Speed / 2, 0);
+            base.Move(0, Speed / 2);
         }
         public void SO()
         {
 
-            base.Bouger(-Vitesse / 2, 0);
-            base.Bouger(0, -Vitesse / 2);
+            base.Move(-Speed / 2, 0);
+            base.Move(0, -Speed / 2);
         }
         public void SE()
         {
 
-            base.Bouger(Vitesse / 2, 0);
-            base.Bouger(0, -Vitesse / 2);
+            base.Move(Speed / 2, 0);
+            base.Move(0, -Speed / 2);
         }
 
 
@@ -198,13 +197,30 @@ namespace BombermanMultiplayer
 
         #region Actions
         
-        public void DropBomb(Tile[,] MapGrid, List<Bomb> BombsOnTheMap, Player otherplayer)
+        public void DropBomb(Tile[,] MapGrid, List<IBomb> BombsOnTheMap, Player otherplayer)
         {
             if (this.BombNumb > 0) //If player still has bombs
             {
                 if (!MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied)
                 {
-                    BombsOnTheMap.Add(new Bomb(this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero));
+
+                    IBomb bombFactory = null;
+
+                    int randomNumber = new Random().Next(1,10);
+
+                    if (randomNumber <= 8)
+                    {
+                        bombFactory = new BombFactory().CreateBomb(BombType.Explosive, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
+                        BombermanFacade bombermanFacade = new BombermanFacade();
+
+                    }
+                    else
+                    {
+
+                        bombFactory = new NonExplosiveBombFactory().CreateBomb(BombType.NonExplosive, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
+                    }
+
+                    BombsOnTheMap.Add(bombFactory);
                     //Case obtain a reference to the bomb dropped on
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].bomb = BombsOnTheMap[BombsOnTheMap.Count-1];
                     MapGrid[this.CasePosition[0], this.CasePosition[1]].Occupied = true;
@@ -212,7 +228,19 @@ namespace BombermanMultiplayer
                 }
             }
         }
-        
+
+        public void CreateNonExplosiveBombUsingFacade(int row, int column)
+        {
+            BombermanFacade bombermanFacade = new BombermanFacade();
+            bombermanFacade.CreateNonExplosiveBomb(row, column);
+        }
+
+        public void MovePlayerUpUsingFacade()
+        {
+            BombermanFacade bombermanFacade = new BombermanFacade();
+            bombermanFacade.MovePlayer(Player.MovementDirection.UP);
+        }
+
         public void DrawPosition(Graphics g)
         {
 
@@ -290,9 +318,9 @@ namespace BombermanMultiplayer
             }
         }
 
-        public void Deactivate(Tile[,] MapGrid, List<Bomb> bombsOnTheMap,  Player otherPlayer)
+        public void Deactivate(Tile[,] MapGrid, List<IBomb> bombsOnTheMap,  Player otherPlayer)
         {
-            Bomb toDesamorce = null;
+            IBomb toDesamorce = null;
 
             //Check if player has the bonus
             if (this.BonusSlot[0]!= BonusType.Desamorce && this.BonusSlot[1] != BonusType.Desamorce)
@@ -304,7 +332,7 @@ namespace BombermanMultiplayer
             {
                 toDesamorce = MapGrid[this.CasePosition[0], this.CasePosition[1]].bomb;
 
-                if (toDesamorce.Proprietary == this.PlayerNumero)
+                if (toDesamorce.CheckProprietary(this.PlayerNumero))
                 {
                     this.BombNumb++;
                 }
@@ -328,7 +356,7 @@ namespace BombermanMultiplayer
                     {
                         toDesamorce = MapGrid[this.CasePosition[0] + i, this.CasePosition[1]].bomb;
 
-                        if (toDesamorce.Proprietary == this.PlayerNumero)
+                        if (toDesamorce.CheckProprietary(this.PlayerNumero))
                         {
                             this.BombNumb++;
                         }
@@ -350,7 +378,7 @@ namespace BombermanMultiplayer
                     {
                         toDesamorce = MapGrid[this.CasePosition[0], this.CasePosition[1] + i].bomb;
 
-                        if (toDesamorce.Proprietary == this.PlayerNumero)
+                        if (toDesamorce.CheckProprietary(this.PlayerNumero))
                         {
                             this.BombNumb++;
                         }
@@ -377,6 +405,27 @@ namespace BombermanMultiplayer
 
 
         }
+
+        public Objects.Prototype.IPrototype ShallowCopy()
+        {
+            return (Player)this.MemberwiseClone();
+        }
+
+        public Objects.Prototype.IPrototype DeepCopy()
+        {
+            Player clone = new Player(this.Lifes, this.totalFrames, 50, 40, this.CasePosition[0], this.CasePosition[1], 2, 2, 10, this.PlayerNumero);
+
+            clone.Name = this.Name;
+            clone.Dead = this.Dead;
+            clone.BombNumb = this.BombNumb;
+            clone.BonusSlot = (BonusType[])this.BonusSlot.Clone(); // Deep copy of an array
+            clone.BonusTimer = (short[])this.BonusTimer.Clone(); // Deep copy of an array
+            clone.Orientation = this.Orientation;
+
+
+            return clone;
+        }
+
 
 
         #endregion

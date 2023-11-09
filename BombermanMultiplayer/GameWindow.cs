@@ -67,7 +67,7 @@ namespace BombermanMultiplayer
             try
             {
 
-                foreach (Bomb bomb in game.BombsOnTheMap)
+                foreach (IBomb bomb in game.BombsOnTheMap)
                 {
 
                 bomb.Draw(gr);

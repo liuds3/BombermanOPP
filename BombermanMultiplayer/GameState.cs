@@ -43,7 +43,7 @@ namespace BombermanMultiplayer
         public bool Over;
 
         //Bomb list
-        public List<Bomb> bombsList;
+        public List<IBomb> bombsList;
 
         public Byte[,] map;
 

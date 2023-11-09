@@ -30,6 +30,9 @@ namespace BombermanMultiplayer
 
         private int port = 3000;
 
+        private static Server _instance;
+        private static readonly object _lock = new object();
+
         //The variable describing the state of the game, who'll be sended throught network
         GameState gamestate;
 
@@ -49,9 +52,23 @@ namespace BombermanMultiplayer
         {
 
         }
-
+        public static Server Instance(int port_)
+        {
+            if(_instance == null)
+            {
+                lock(_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new Server(port_);
+                    }
+                }
+            }
+            return _instance;
+        }
         public Server(int port_)
         {
+
             port = port_;
         }
 

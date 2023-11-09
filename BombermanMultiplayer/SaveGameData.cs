@@ -9,12 +9,12 @@ namespace BombermanMultiplayer
     [Serializable]
     public struct SaveGameData
     {
-        public List<Bomb> bombsOnTheMap;
+        public List<IBomb> bombsOnTheMap;
         public Tile[,] MapGrid;
         public Player player1, player2;
 
 
-        public SaveGameData(List<Bomb> bombsOnTheMap_, Tile[,] MapGrid_, Player player1_, Player player2_)
+        public SaveGameData(List<IBomb> bombsOnTheMap_, Tile[,] MapGrid_, Player player1_, Player player2_)
         {
             this.bombsOnTheMap = bombsOnTheMap_;
             this.MapGrid = MapGrid_;
