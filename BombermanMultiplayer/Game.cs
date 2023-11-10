@@ -1,4 +1,3 @@
-using BombermanMultiplayer.Objects.Facade;
 using BombermanMultiplayer.Objects.Prototype;
 using System;
 using System.Collections.Generic;
@@ -190,7 +189,6 @@ namespace BombermanMultiplayer
                     if (player1.Dead)
                         break;
                     player1.DropBomb(this.world.MapGrid, this.BombsOnTheMap, player2);
-                    ShowFacadeUsageExample();
                     break;
                 case Keys.A:
                     if (player1.Dead)
@@ -732,18 +730,6 @@ namespace BombermanMultiplayer
                     Paused = true;
                 }
             }
-        }
-
-
-        public void ShowFacadeUsageExample()
-        {
-            BombermanFacade bombermanFacade = new BombermanFacade();
-
-          
-            bombermanFacade.CreateNonExplosiveBomb(1, 2);
-
-            
-            bombermanFacade.MovePlayer(Player.MovementDirection.UP);
         }
 
         public void CreateShallowCopyOfBomb()

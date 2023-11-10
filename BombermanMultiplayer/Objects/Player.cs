@@ -10,9 +10,9 @@ using System.Media;
 using System.Diagnostics;
 using System.Collections;
 using BombermanMultiplayer.Objects;
-using BombermanMultiplayer.Objects.Facade;
 using System.Data.Common;
 using BombermanMultiplayer.Objects.Prototype;
+using BombermanMultiplayer.Objects.Strategy;
 
 namespace BombermanMultiplayer
 {
@@ -125,19 +125,26 @@ namespace BombermanMultiplayer
 
         public void Move()
         {
+
+            StrategyClass strategy = new StrategyClass();
+
             switch (this.Orientation)
             {
                 case MovementDirection.UP:
-                    DeplHaut();
+                    strategy.setStrategy(new GoUp());
+                    strategy.executeStrategy(this);
                     break;
                 case MovementDirection.DOWN:
-                    DeplBas();
+                    strategy.setStrategy(new GoDown());
+                    strategy.executeStrategy(this);
                     break;
                 case MovementDirection.LEFT:
-                    DeplGauche();
+                    strategy.setStrategy(new GoLeft());
+                    strategy.executeStrategy(this);
                     break;
                 case MovementDirection.RIGHT:
-                    DeplDroite();
+                    strategy.setStrategy(new GoRight());
+                    strategy.executeStrategy(this);
                     break;
                 default:
                     this.frameindex = 0;
@@ -211,7 +218,6 @@ namespace BombermanMultiplayer
                     if (randomNumber <= 8)
                     {
                         bombFactory = new BombFactory().CreateBomb(BombType.Explosive, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
-                        BombermanFacade bombermanFacade = new BombermanFacade();
 
                     }
                     else
@@ -227,18 +233,6 @@ namespace BombermanMultiplayer
                     this.BombNumb--;
                 }
             }
-        }
-
-        public void CreateNonExplosiveBombUsingFacade(int row, int column)
-        {
-            BombermanFacade bombermanFacade = new BombermanFacade();
-            bombermanFacade.CreateNonExplosiveBomb(row, column);
-        }
-
-        public void MovePlayerUpUsingFacade()
-        {
-            BombermanFacade bombermanFacade = new BombermanFacade();
-            bombermanFacade.MovePlayer(Player.MovementDirection.UP);
         }
 
         public void DrawPosition(Graphics g)
