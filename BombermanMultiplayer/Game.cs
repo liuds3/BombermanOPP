@@ -28,10 +28,10 @@ namespace BombermanMultiplayer
         public List<IBomb> BombsOnTheMap;
         public System.Timers.Timer LogicTimer;
         private object originalBomb;
-        private List<NonExplosiveBomb> bombsOnTheMap = new List<NonExplosiveBomb>();
+        private List<NoDamageBomb> bombsOnTheMap = new List<NoDamageBomb>();
 
         Bomb explosiveBomb = new Bomb(1, 1, 2, 5, 5, 0, 5, 5, 1);
-        NonExplosiveBomb nonExplosiveBomb = new NonExplosiveBomb(1, 1, 2, 5, 5, 0, 5, 5, 1);
+        NoDamageBomb nonExplosiveBomb = new NoDamageBomb(1, 1, 2, 5, 5, 0, 5, 5, 1);
 
 
 
@@ -157,7 +157,7 @@ namespace BombermanMultiplayer
         public void Game_KeyDown(Keys key)
         {
             IBombAdapter explosiveBombAdapter = new BombAdapter(explosiveBomb);
-            IBombAdapter nonExplosiveBombAdapter = new NonExplosiveBombAdapter(nonExplosiveBomb);
+            IBombAdapter nonExplosiveBombAdapter = new NoDamageBombAdapter(nonExplosiveBomb);
 
             switch (key)
             {
@@ -418,14 +418,14 @@ namespace BombermanMultiplayer
         {
             List<int> ToRemove = new List<int>();
 
-            //Check for bomb explosion
+            //Check for bomb BombExplode
             for (int i = 0; i < BombsOnTheMap.Count; i++)
             {
-                BombsOnTheMap[i].UpdateFrame((int)LogicTimer.Interval);
-                BombsOnTheMap[i].TimingExplosion((int)LogicTimer.Interval);
-                if (BombsOnTheMap[i].GetExplosing())
+                BombsOnTheMap[i].UpdateAnimFrame((int)LogicTimer.Interval);
+                BombsOnTheMap[i].CalculateBombExplodeTime((int)LogicTimer.Interval);
+                if (BombsOnTheMap[i].IsExploding())
                 {
-                    BombsOnTheMap[i].Explosion(this.world.MapGrid, player1, player2);
+                    BombsOnTheMap[i].BombExplode(this.world.MapGrid, player1, player2);
                     ToRemove.Add(i);
                 }
             }
@@ -519,7 +519,7 @@ namespace BombermanMultiplayer
                     player1.Move();
 
                 }
-                player1.UpdateFrame((int)LogicTimer.Interval);
+                player1.UpdateAnimFrame((int)LogicTimer.Interval);
             }
             else
                 player1.frameindex = 1;
@@ -530,7 +530,7 @@ namespace BombermanMultiplayer
                 {
                     player2.Move();
                 }
-                player2.UpdateFrame((int)LogicTimer.Interval);
+                player2.UpdateAnimFrame((int)LogicTimer.Interval);
             }
             else
                 player2.frameindex = 1;
@@ -734,11 +734,11 @@ namespace BombermanMultiplayer
 
         public void CreateShallowCopyOfBomb()
         {
-            NonExplosiveBomb originalBomb = new NonExplosiveBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
+            NoDamageBomb originalBomb = new NoDamageBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
 
             IPrototype shallowCopy = originalBomb.ShallowCopy();
 
-            NonExplosiveBomb newBomb = (NonExplosiveBomb)shallowCopy;
+            NoDamageBomb newBomb = (NoDamageBomb)shallowCopy;
 
             newBomb.DetonationTime = 1000;
 
@@ -747,11 +747,11 @@ namespace BombermanMultiplayer
 
         public void CreateDeepCopyOfBomb()
         {
-            NonExplosiveBomb originalBomb = new NonExplosiveBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
+            NoDamageBomb originalBomb = new NoDamageBomb(1, 1, 1, 2, 2, 4, 5, 5, 1);
 
             IPrototype deepCopy = originalBomb.DeepCopy();
 
-            NonExplosiveBomb newBomb = (NonExplosiveBomb)deepCopy;
+            NoDamageBomb newBomb = (NoDamageBomb)deepCopy;
 
             newBomb.DetonationTime = 1000;
 

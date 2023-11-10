@@ -74,7 +74,7 @@ namespace BombermanMultiplayer
             }
         }
 
-        public new void Draw(Graphics gr)
+        public new void ShowFrame(Graphics gr)
         {
             if (this.Sprite != null)
             {
@@ -84,7 +84,7 @@ namespace BombermanMultiplayer
             }
             if (BonusHere != null)
             {
-                this.BonusHere.Draw(gr);
+                this.BonusHere.ShowFrame(gr);
 
             }
         }

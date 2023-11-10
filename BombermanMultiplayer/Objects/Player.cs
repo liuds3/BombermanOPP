@@ -217,13 +217,13 @@ namespace BombermanMultiplayer
 
                     if (randomNumber <= 8)
                     {
-                        bombFactory = new BombFactory().CreateBomb(BombType.Explosive, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
+                        bombFactory = new BombFactory().CreateBomb(BombType.LongTime, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
 
                     }
                     else
                     {
 
-                        bombFactory = new NonExplosiveBombFactory().CreateBomb(BombType.NonExplosive, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
+                        bombFactory = new NoDamageBombFactory().CreateBomb(BombType.NoDamage, this.CasePosition[0], this.CasePosition[1], 8, 48, 48, 2000, 48, 48, this.PlayerNumero);
                     }
 
                     BombsOnTheMap.Add(bombFactory);
@@ -241,7 +241,7 @@ namespace BombermanMultiplayer
             g.DrawString(CasePosition[0].ToString() + ":" + CasePosition[1].ToString(), new Font("Arial", 16), new SolidBrush(Color.Pink), this.Source.X, this.Source.Y);
 
         }
-        public new void Draw(Graphics gr)
+        public new void ShowFrame(Graphics gr)
         {
             if (this.Sprite != null)
             {

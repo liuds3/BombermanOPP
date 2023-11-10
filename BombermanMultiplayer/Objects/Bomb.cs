@@ -73,7 +73,7 @@ namespace BombermanMultiplayer
                 return false;
         }
 
-        public bool GetExplosing()
+        public bool IsExploding()
         {
             if (this.Explosing)
                 return true;
@@ -81,7 +81,7 @@ namespace BombermanMultiplayer
                 return false;
         }
 
-        public void TimingExplosion(int elsapedTime)
+        public void CalculateBombExplodeTime(int elsapedTime)
         {
             if (DetonationTime <= 0)
             {
@@ -90,7 +90,7 @@ namespace BombermanMultiplayer
             DetonationTime -= elsapedTime;
         }
 
-        public void Explosion(Tile[,] MapGrid, Player player1, Player player2)
+        public void BombExplode(Tile[,] MapGrid, Player player1, Player player2)
         {
             int variablePosition = 0;
 
@@ -137,7 +137,7 @@ namespace BombermanMultiplayer
             {
 
                 //UP
-                //If there's nothing undestroyable obstruing the path of the explosion
+                //If there's nothing undestroyable obstruing the path of the BombExplode
                 if (PropagationUP)
                 {
 

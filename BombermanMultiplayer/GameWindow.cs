@@ -51,17 +51,17 @@ namespace BombermanMultiplayer
         }
 
 
-        public void Draw()
+        public void ShowFrame()
         {
             gr.Clear(pbGame.BackColor);
             game.world.refreshTileSprites();
 
-            game.world.Draw(gr);
+            game.world.ShowFrame(gr);
 
-            game.player1.Draw(gr);
+            game.player1.ShowFrame(gr);
             game.player1.DrawPosition(gr);
 
-            game.player2.Draw(gr);
+            game.player2.ShowFrame(gr);
             game.player2.DrawPosition(gr);
 
             try
@@ -70,7 +70,7 @@ namespace BombermanMultiplayer
                 foreach (IBomb bomb in game.BombsOnTheMap)
                 {
 
-                bomb.Draw(gr);
+                bomb.ShowFrame(gr);
 
                 }
 
@@ -122,7 +122,7 @@ namespace BombermanMultiplayer
                             new SolidBrush(Color.WhiteSmoke), 0, this.pbGame.Height / 2 - this.pbGame.Height / 8 + this.pbGame.Height / 9);
                         break;
                     default:
-                        gr.DrawString("Draw", new Font("Stencil", (float)(this.pbGame.Height / 10), System.Drawing.FontStyle.Bold),
+                        gr.DrawString("ShowFrame", new Font("Stencil", (float)(this.pbGame.Height / 10), System.Drawing.FontStyle.Bold),
                             new SolidBrush(Color.WhiteSmoke), 0, this.pbGame.Height / 2 - this.pbGame.Height / 8 + this.pbGame.Height / 9);
                         break;
                 }
@@ -213,7 +213,7 @@ namespace BombermanMultiplayer
         private void refreshGraphics_Tick(object sender, EventArgs e)
         {
 
-                Draw();
+                ShowFrame();
 
         }
 
@@ -274,7 +274,7 @@ namespace BombermanMultiplayer
                         game.world.loadSpriteTile(Properties.Resources.BlockDestructible, Properties.Resources.BlockNonDestructible);
                         game.player1.LoadSprite(Properties.Resources.AT_DOWN);
                         game.player2.LoadSprite(Properties.Resources.T_UP);
-                        Draw();
+                        ShowFrame();
 
                     }
                     catch (Exception ex)

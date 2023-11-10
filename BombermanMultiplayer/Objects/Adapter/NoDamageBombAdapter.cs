@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BombermanMultiplayer.Objects.Adapter
 {
-    public class BombAdapter : IBombAdapter
+    public class NoDamageBombAdapter : IBombAdapter
     {
-        private readonly Bomb adaptBomb;
+        private readonly NoDamageBomb adaptBomb;
 
-        public BombAdapter(Bomb adapteeBomb)
+        public NoDamageBombAdapter(NoDamageBomb adapteeBomb)
         {
             adaptBomb = adapteeBomb;
         }

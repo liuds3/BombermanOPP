@@ -13,7 +13,7 @@ using BombermanMultiplayer.Objects.Prototype;
 namespace BombermanMultiplayer
 {
     [Serializable]
-    public class NonExplosiveBomb : GameObject, IDisposable, IBomb, IPrototype
+    public class NoDamageBomb : GameObject, IDisposable, IBomb, IPrototype
     {
 
         private int _DetonationTime = 2000;
@@ -46,7 +46,7 @@ namespace BombermanMultiplayer
 
         #endregion
 
-        public bool GetExplosing()
+        public bool IsExploding()
         {
             if (this.Explosing)
                 return true;
@@ -61,7 +61,7 @@ namespace BombermanMultiplayer
             else
                 return false;
         }
-        public NonExplosiveBomb(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
+        public NoDamageBomb(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
             : base(caseCol * TileWidth, caseLigne * TileHeight, totalFrames, frameWidth, frameHeight)
         {
             CasePosition = new int[2] { caseLigne, caseCol };
@@ -77,7 +77,7 @@ namespace BombermanMultiplayer
 
 
 
-        public void TimingExplosion(int elsapedTime)
+        public void CalculateBombExplodeTime(int elsapedTime)
         {
             if (DetonationTime <= 0)
             {
@@ -86,7 +86,7 @@ namespace BombermanMultiplayer
             DetonationTime -= elsapedTime;
         }
 
-        public void Explosion(Tile[,] MapGrid, Player player1, Player player2)
+        public void BombExplode(Tile[,] MapGrid, Player player1, Player player2)
         {
 
             bool PropagationUP, PropagationDOWN, PropagationLEFT, PropagationRIGHT;
@@ -161,13 +161,13 @@ namespace BombermanMultiplayer
 
         public Objects.Prototype.IPrototype ShallowCopy()
         {
-            return (NonExplosiveBomb)this.MemberwiseClone();
+            return (NoDamageBomb)this.MemberwiseClone();
         }
 
         public Objects.Prototype.IPrototype DeepCopy()
         {
             // Perform a deep copy of the NonExplosiveBomb instance
-            NonExplosiveBomb clone = new NonExplosiveBomb(
+            NoDamageBomb clone = new NoDamageBomb(
                 this.CasePosition[0],
                 this.CasePosition[1],
                 this.totalFrames,

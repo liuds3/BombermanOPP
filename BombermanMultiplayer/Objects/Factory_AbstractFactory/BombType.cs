@@ -9,7 +9,7 @@ namespace BombermanMultiplayer.Objects
     public enum BombType
     {
         Normal,
-        Explosive,
-        NonExplosive
+        LongTime,
+        NoDamage
     }
 }

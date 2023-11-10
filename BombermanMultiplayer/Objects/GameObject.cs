@@ -126,7 +126,7 @@ namespace BombermanMultiplayer
 
 
         
-        public void Draw(Graphics gr)
+        public void ShowFrame(Graphics gr)
         {
             if (this.Sprite != null)
             {
@@ -138,7 +138,7 @@ namespace BombermanMultiplayer
 
 
 
-        public void UpdateFrame(int elsapedTime)
+        public void UpdateAnimFrame(int elsapedTime)
         {
 
             _totalElapsedTime += elsapedTime;

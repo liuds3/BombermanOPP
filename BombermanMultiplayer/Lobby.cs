@@ -503,7 +503,7 @@ namespace BombermanMultiplayer
 
         }
 
-        public void Draw()
+        public void ShowFrame()
         {
 
             if (!game.player1.Dead)
@@ -558,19 +558,19 @@ namespace BombermanMultiplayer
 
             gr.Clear(pbGame.BackColor);
 
-            game.world.Draw(gr);
+            game.world.ShowFrame(gr);
 
-            game.player1.Draw(gr);
+            game.player1.ShowFrame(gr);
             game.player1.DrawPosition(gr);
 
-            game.player2.Draw(gr);
+            game.player2.ShowFrame(gr);
             game.player2.DrawPosition(gr);
 
             foreach (Bomb bomb in game.BombsOnTheMap)
             {
                 try
                 {
-                    bomb.Draw(gr);
+                    bomb.ShowFrame(gr);
 
                 }
                 catch (Exception)
@@ -619,7 +619,7 @@ namespace BombermanMultiplayer
                             new SolidBrush(Color.WhiteSmoke), 0, this.pbGame.Height / 2 - this.pbGame.Height / 8 + this.pbGame.Height / 9);
                         break;
                     default:
-                        gr.DrawString("Draw", new Font("Stencil", (float)(this.pbGame.Height / 10), System.Drawing.FontStyle.Bold),
+                        gr.DrawString("ShowFrame", new Font("Stencil", (float)(this.pbGame.Height / 10), System.Drawing.FontStyle.Bold),
                             new SolidBrush(Color.WhiteSmoke), 0, this.pbGame.Height / 2 - this.pbGame.Height / 8 + this.pbGame.Height / 9);
                         break;
                 }
@@ -690,7 +690,7 @@ namespace BombermanMultiplayer
         private void refreshGraphics_Tick(object sender, EventArgs e)
         {
             LoadAllMapSprites();
-            Draw();
+            ShowFrame();
         }
 
         //Close properly

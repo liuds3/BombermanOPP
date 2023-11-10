@@ -12,12 +12,12 @@ using System.Diagnostics;
 namespace BombermanMultiplayer
 {
     [Serializable]
-    public class Bomb2 : GameObject, IDisposable, IBomb
+    public class LongTimeBomb : GameObject, IDisposable, IBomb
     {
 
-        private int _DetonationTime = 2000;
+        private int _DetonationTime = 4000;
         public bool Explosing = false;
-        private int BombPower = 3;
+        private int BombPower = 5;
 
         //Who drops the Bomb2, player 1 = 1, player 2 = 2
         public short Proprietary;
@@ -45,7 +45,7 @@ namespace BombermanMultiplayer
 
         #endregion
 
-        public bool GetExplosing()
+        public bool IsExploding()
         {
             if (this.Explosing)
                 return true;
@@ -60,7 +60,7 @@ namespace BombermanMultiplayer
             else
                 return false;
         }
-        public Bomb2(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
+        public LongTimeBomb(int caseLigne, int caseCol, int totalFrames, int frameWidth, int frameHeight, int detonationTime, int TileWidth, int TileHeight, short proprietary)
             : base(caseCol * TileWidth, caseLigne * TileHeight, totalFrames, frameWidth, frameHeight)
         {
             CasePosition = new int[2] { caseLigne, caseCol };
@@ -76,7 +76,7 @@ namespace BombermanMultiplayer
 
 
 
-        public void TimingExplosion(int elsapedTime)
+        public void CalculateBombExplodeTime(int elsapedTime)
         {
             if (DetonationTime <= 0)
             {
@@ -85,7 +85,7 @@ namespace BombermanMultiplayer
             DetonationTime -= elsapedTime;
         }
 
-        public void Explosion(Tile[,] MapGrid, Player player1, Player player2)
+        public void BombExplode(Tile[,] MapGrid, Player player1, Player player2)
         {
             int variablePosition = 0;
 
@@ -132,7 +132,7 @@ namespace BombermanMultiplayer
             {
 
                 //UP
-                //If there's nothing undestroyable obstruing the path of the explosion
+                //If there's nothing undestroyable obstruing the path of the BombExplode
                 if (PropagationUP)
                 {
 
@@ -263,9 +263,9 @@ namespace BombermanMultiplayer
 
         }
 
-        public Bomb2 Clone()
+        public LongTimeBomb Clone()
         {
-            return (Bomb2)this.MemberwiseClone();
+            return (LongTimeBomb)this.MemberwiseClone();
         }
 
 

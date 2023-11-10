@@ -33,7 +33,7 @@ namespace BombermanMultiplayer
         }
 
 
-        public void Draw(Graphics gr)
+        public void ShowFrame(Graphics gr)
         {
             if (Background != null)
              {
@@ -44,7 +44,7 @@ namespace BombermanMultiplayer
             {
                 for (int j = 0; j < MapGrid.GetLength(1); j++) //Colonne
                 {
-                    MapGrid[i, j].Draw(gr);
+                    MapGrid[i, j].ShowFrame(gr);
                 }
             }
 

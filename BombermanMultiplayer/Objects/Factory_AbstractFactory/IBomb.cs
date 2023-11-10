@@ -10,13 +10,13 @@ namespace BombermanMultiplayer
     public interface IBomb
     {
 
-        void TimingExplosion(int elsapedTime);
+        void CalculateBombExplodeTime(int elsapedTime);
 
-        void Explosion(Tile[,] MapGrid, Player player1, Player player2);
+        void BombExplode(Tile[,] MapGrid, Player player1, Player player2);
 
-        bool GetExplosing();
+        bool IsExploding();
 
-        void UpdateFrame(int elsapedTime);
+        void UpdateAnimFrame(int elsapedTime);
 
         bool CheckProprietary(byte player);
 
@@ -24,7 +24,7 @@ namespace BombermanMultiplayer
 
         void LoadSprite(Image sprite);
 
-        void Draw(Graphics gr);
+        void ShowFrame(Graphics gr);
 
     }
 }

@@ -15,9 +15,9 @@ namespace BombermanMultiplayer.Objects
             {
                 case BombType.Normal:
                     return new Bomb(caseLigne,caseCol,totalFrames,frameWidth,frameHeight,detonationTime,TileWidth,TileHeight,proprietary);
-                case BombType.Explosive:
+                case BombType.LongTime:
                 default:
-                    return new Bomb2(caseLigne, caseCol, totalFrames, frameWidth, frameHeight, detonationTime, TileWidth, TileHeight, proprietary);
+                    return new LongTimeBomb(caseLigne, caseCol, totalFrames, frameWidth, frameHeight, detonationTime, TileWidth, TileHeight, proprietary);
             }
         }
 
