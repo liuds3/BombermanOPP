@@ -75,9 +75,6 @@
     <Compile Include="Objects\Adapter\IAdapter.cs" />
     <Compile Include="Objects\Adapter\NonExplosiveBombAdapter.cs" />
     <Compile Include="Objects\Bomb2.cs" />
-    <Compile Include="Objects\Facade\BombermanFacade.cs" />
-    <Compile Include="Objects\Facade\BombermanGameFacade.cs" />
-    <Compile Include="Objects\Facade\Facade_Example.cs" />
     <Compile Include="Objects\Command\Commands.cs" />
     <Compile Include="Objects\Factory_AbstractFactory\BombFactory.cs" />
     <Compile Include="Objects\Factory_AbstractFactory\BombType.cs" />
@@ -88,6 +85,12 @@
     <Compile Include="Objects\Factory_AbstractFactory\NonExplosiveBombFactory.cs" />
     <Compile Include="Objects\Prototype\BombPrototype.cs" />
     <Compile Include="Objects\Prototype\ICloneable.cs" />
+    <Compile Include="Objects\Strategy\GoRight.cs" />
+    <Compile Include="Objects\Strategy\GoLeft.cs" />
+    <Compile Include="Objects\Strategy\GoDown.cs" />
+    <Compile Include="Objects\Strategy\GoUp.cs" />
+    <Compile Include="Objects\Strategy\Strategy.cs" />
+    <Compile Include="Objects\Strategy\StrategyClass.cs" />
     <Compile Include="SaveGameData.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameState.cs" />

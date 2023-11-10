@@ -48,30 +48,30 @@ namespace BombermanMultiplayer
 
             if (num == 0)
             {
-                this.BonusHere = new Bonus.BonusBuilder(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height).WithType(BonusType.PowerBomb).Build();
+                this.BonusHere = new Bonus(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height, BonusType.PowerBomb);
                 this.BonusHere.LoadSprite(Properties.Resources.SuperBomb);
             }
             else if (num == 1 )
             {
-                this.BonusHere = new Bonus.BonusBuilder(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height).WithType(BonusType.SpeedBoost).Build();
+                this.BonusHere = new Bonus(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height, BonusType.SpeedBoost);
                 this.BonusHere.LoadSprite(Properties.Resources.SpeedUp);
             }
             else if (num == 2)
             {
-                this.BonusHere = new Bonus.BonusBuilder(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height).WithType(BonusType.Desamorce).Build();
+                this.BonusHere = new Bonus(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height, BonusType.Desamorce);
                 this.BonusHere.LoadSprite(Properties.Resources.Deactivate);
             }
 
             else if (num ==  3)
             {
-                this.BonusHere = new Bonus.BonusBuilder(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height).WithType(BonusType.Armor).Build();
+                this.BonusHere = new Bonus(this.Source.X, this.Source.Y, 1, this.Source.Width, this.Source.Height, BonusType.Armor);
                 this.BonusHere.LoadSprite(Properties.Resources.Armor);
             }
 
-            //if (this.BonusHere != null)
-            //{
-            //    this.BonusHere.CheckCasePosition(this.Source.Width, this.Source.Height);
-            //}
+            if (this.BonusHere != null)
+            {
+                this.BonusHere.CheckCasePosition(this.Source.Width, this.Source.Height);
+            }
         }
 
         public new void Draw(Graphics gr)
